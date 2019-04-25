@@ -39,20 +39,38 @@ def gc_characters_cython(haystack_bytes):
 
 
 def gc_characters_cext_b(haystack_bytes):
-    return charcount.count(haystack_bytes, b"cCgG")
+    return charcount.count(haystack_bytes, b"cCgG", 0)
 
 
 def gc_characters_cext_u(haystack):
-    return charcount.count(haystack, "cCgG")
+    return charcount.count(haystack, "cCgG", 0)
+
+
+def gc_characters_cext_gb(haystack_bytes):
+    return charcount.count(haystack_bytes, b"cCgG", 1)
+
+
+def gc_characters_cext_gu(haystack):
+    return charcount.count(haystack, "cCgG", 1)
+
+
+def time_assert(name, func, number=100):
+    assert func() == check_n
+    t = timeit.timeit(func, number=100)
+    print(name, t)
 
 
 print("generating data...")
 haystack = "".join(random.choice(string.ascii_letters) for x in range(1_000_000))
 haystack_bytes = haystack.encode()
-print("original", timeit.timeit(lambda: gc_characters_original(haystack), number=100))
-print("unrolled", timeit.timeit(lambda: gc_characters_iters(haystack), number=100))
-print("cython", timeit.timeit(lambda: gc_characters_cython(haystack_bytes), number=100))
-print("c extension, bytes", timeit.timeit(lambda: gc_characters_cext_b(haystack_bytes), number=100))
-print("c extension, unicode", timeit.timeit(lambda: gc_characters_cext_u(haystack), number=100))
-print("manual loop", timeit.timeit(lambda: gc_characters_manual(haystack), number=100))
-print("counter", timeit.timeit(lambda: gc_characters_counter(haystack), number=100))
+check_n = gc_characters_original(haystack)
+
+time_assert("original", lambda: gc_characters_original(haystack))
+time_assert("unrolled", lambda: gc_characters_iters(haystack))
+time_assert("cython", lambda: gc_characters_cython(haystack_bytes))
+time_assert("c extension, bytes", lambda: gc_characters_cext_b(haystack_bytes))
+time_assert("c extension, unicode", lambda: gc_characters_cext_u(haystack))
+time_assert("c extension glib, bytes", lambda: gc_characters_cext_gb(haystack_bytes))
+time_assert("c extension glib, unicode", lambda: gc_characters_cext_gu(haystack))
+#time_assert("manual loop", lambda: gc_characters_manual(haystack))
+#time_assert("counter", lambda: gc_characters_counter(haystack))
