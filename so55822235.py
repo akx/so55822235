@@ -57,7 +57,7 @@ def gc_characters_cext_gu(haystack):
 def time_assert(name, func, number=100):
     assert func() == check_n
     t = timeit.timeit(func, number=100)
-    print(name, t)
+    print("%-30s %.6f" % (name, t))
 
 
 print("generating data...")
