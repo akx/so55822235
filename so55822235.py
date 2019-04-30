@@ -1,6 +1,3 @@
-import pyximport
-
-pyximport.install()
 import string
 import random
 import timeit
@@ -34,8 +31,12 @@ def gc_characters_iters(haystack):
     return gc_characters
 
 
-def gc_characters_cython(haystack_bytes):
-    return charcount_cython.count(haystack_bytes, b"cCgG")
+def gc_characters_cython_libc(haystack_bytes):
+    return charcount_cython.libc_count(haystack_bytes, b"cCgG")
+
+def gc_characters_cython_glibc(haystack_bytes):
+    return charcount_cython.glibc_count(haystack_bytes, b"cCgG")
+
 
 
 def gc_characters_cext_b(haystack_bytes):
@@ -67,7 +68,8 @@ check_n = gc_characters_original(haystack)
 
 time_assert("original", lambda: gc_characters_original(haystack))
 time_assert("unrolled", lambda: gc_characters_iters(haystack))
-time_assert("cython", lambda: gc_characters_cython(haystack_bytes))
+time_assert("cython libc", lambda: gc_characters_cython_libc(haystack_bytes))
+time_assert("cython glibc", lambda: gc_characters_cython_glibc(haystack_bytes))
 time_assert("c extension, bytes", lambda: gc_characters_cext_b(haystack_bytes))
 time_assert("c extension, unicode", lambda: gc_characters_cext_u(haystack))
 time_assert("c extension glib, bytes", lambda: gc_characters_cext_gb(haystack_bytes))

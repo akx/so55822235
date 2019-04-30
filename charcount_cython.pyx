@@ -1,7 +1,11 @@
+# distutils: include_dirs = .
 from libc.string cimport strpbrk
 
-cdef int _count(char* s, char *key):
-    assert s is not NULL, "byte string value is NULL"
+cdef extern from "./glibc-string.h":
+    char *glibc_strpbrk(const char *s, const char *accept)
+
+
+cdef int _libc_count(char* s, char *key):
     cdef int n = 0
     cdef char* pch = strpbrk (s, key)
     while pch is not NULL:
@@ -9,5 +13,19 @@ cdef int _count(char* s, char *key):
         pch = strpbrk (pch + 1, key)
     return n
 
-def count(s, key):
-    return _count(s, key)
+
+cdef int _glibc_count(char* s, char *key):
+    cdef int n = 0
+    cdef char* pch = glibc_strpbrk (s, key)
+    while pch is not NULL:
+        n += 1
+        pch = glibc_strpbrk (pch + 1, key)
+    return n
+
+
+def libc_count(s, key):
+    return _libc_count(s, key)
+
+
+def glibc_count(s, key):
+    return _glibc_count(s, key)

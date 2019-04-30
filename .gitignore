@@ -1,3 +1,4 @@
+.vscode
 *.so
 build
-.vscode
+charcount_cython.c
