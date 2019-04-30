@@ -12,6 +12,19 @@ The wrapper and experiment code here is MIT licensed; the GNU bits are licensed 
 
 To run, `pip install cython`, then `make`.
 
+Newest results at time of writing:
+
+```
+original                       | 3.366711 sec / 1000 iter | 297 iter/s
+unrolled                       | 3.332623 sec / 1000 iter | 300 iter/s
+cython libc                    | 4.451539 sec / 1000 iter | 224 iter/s
+cython glibc                   | 1.774841 sec / 1000 iter | 563 iter/s <- fast
+c extension, bytes             | 4.485469 sec / 1000 iter | 222 iter/s
+c extension, unicode           | 4.475643 sec / 1000 iter | 223 iter/s
+c extension glib, bytes        | 1.590433 sec / 1000 iter | 628 iter/s
+c extension glib, unicode      | 1.573829 sec / 1000 iter | 635 iter/s <- fastest
+```
+
 ---
 
 

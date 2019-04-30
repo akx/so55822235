@@ -55,10 +55,11 @@ def gc_characters_cext_gu(haystack):
     return charcount.count(haystack, "cCgG", 1)
 
 
-def time_assert(name, func, number=100):
+def time_assert(name, func, number=1000):
     assert func() == check_n
-    t = timeit.timeit(func, number=100)
-    print("%-30s %.6f" % (name, t))
+    t = timeit.timeit(func, number=number)
+    itps = number / t
+    print("%-30s | %.6f sec / %4d iter | %d iter/s" % (name, t, number, itps))
 
 
 print("generating data...")
