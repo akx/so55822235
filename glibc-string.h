@@ -16,7 +16,8 @@
 // https://github.com/bminor/glibc/blob/fe92a91f1e713ba4951bc6e6162f8803dc76b816/string/strpbrk.c
 
 #include "libc-pointer-arith.h"
-#include "string.h"
+#include <string.h>
+
 /* Return the length of the maximum initial segment of S which contains no
  * characters from REJECT.  */
 static size_t glibc_strcspn(const char *str, const char *reject) {
