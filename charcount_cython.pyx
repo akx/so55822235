@@ -5,6 +5,10 @@ cdef extern from "./glibc-string.h":
     char *glibc_strpbrk(const char *s, const char *accept)
 
 
+cdef extern from "./fastcharcount_impl.h":
+    size_t fastcharcount(const char *s, const char *accept)
+
+
 cdef int _libc_count(char* s, char *key):
     cdef int n = 0
     cdef char* pch = strpbrk (s, key)
@@ -29,3 +33,7 @@ def libc_count(s, key):
 
 def glibc_count(s, key):
     return _glibc_count(s, key)
+
+
+def fast_count(s, key):
+    return fastcharcount(s, key)

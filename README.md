@@ -4,6 +4,8 @@ My original [answer](https://stackoverflow.com/a/55822728/51685) is reproduced b
 
 The updated TL;DR is that 
 
+* A custom function that melds together what GNU libc's `strcspn()` and `strpbrk()` do is by far fastest
+  * (and could be made faster with SSE or similar)
 * GNU libc has a fast `strpbrk()`, probably even faster if you have SSE4
 * macOS's default `strpbrk()` is very slow
 * Python's built-in `count()` is pretty fast too, but you need to run it 4 times for 4 characters
@@ -15,14 +17,17 @@ To run, `pip install cython`, then `make`.
 Newest results at time of writing:
 
 ```
-original                       | 3.366711 sec / 1000 iter | 297 iter/s
-unrolled                       | 3.332623 sec / 1000 iter | 300 iter/s
-cython libc                    | 4.451539 sec / 1000 iter | 224 iter/s
-cython glibc                   | 1.774841 sec / 1000 iter | 563 iter/s <- fast
-c extension, bytes             | 4.485469 sec / 1000 iter | 222 iter/s
-c extension, unicode           | 4.475643 sec / 1000 iter | 223 iter/s
-c extension glib, bytes        | 1.590433 sec / 1000 iter | 628 iter/s
-c extension glib, unicode      | 1.573829 sec / 1000 iter | 635 iter/s <- fastest
+original                       | 6.463880 sec / 2000 iter | 309 iter/s
+unrolled                       | 6.378582 sec / 2000 iter | 313 iter/s
+cython libc                    | 8.443358 sec / 2000 iter | 236 iter/s
+cython glibc                   | 2.936697 sec / 2000 iter | 681 iter/s
+cython fast                    | 0.766082 sec / 2000 iter | 2610 iter/s
+c extension, bytes             | 8.373438 sec / 2000 iter | 238 iter/s
+c extension, unicode           | 8.394805 sec / 2000 iter | 238 iter/s
+c extension glib, bytes        | 2.988184 sec / 2000 iter | 669 iter/s
+c extension glib, unicode      | 2.992429 sec / 2000 iter | 668 iter/s
+c extension fast, bytes        | 0.754072 sec / 2000 iter | 2652 iter/s
+c extension fast, unicode      | 0.762074 sec / 2000 iter | 2624 iter/s
 ```
 
 ---

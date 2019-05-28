@@ -3,6 +3,7 @@
 #include <Python.h>
 #include <stdio.h>
 #include <string.h>
+#include "fastcharcount_impl.h"
 
 static unsigned int count(const char *str, const char *key) {
   unsigned int n = 0;
@@ -41,6 +42,9 @@ static PyObject *charcount_count(PyObject *self, PyObject *args) {
     break;
   case 1:
     n = gcount(str, key);
+    break;
+  case 2:
+    n = fastcharcount(str, key);
     break;
   }
   return PyLong_FromLong(n);
